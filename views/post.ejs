@@ -14,10 +14,24 @@
                 on <%= post[0].dateCreated.toString().slice(0, 21) %></span
               >
 
-              <p><%= post[0].detail %></p>
+              <div class="my-3">
+                <button class="btn btn-primary" onclick="showTextBox()">Update</button>
+                <form action="/post/<%= post[0]._id %>?_method=DELETE" method="post" style="display: inline;">
+                  <button class="btn btn-danger">Delete</button>
+                </form>
+
+                <form method="POST" action="/post/<%= post[0]._id %>?_method=PUT" class="mt-2">
+                  <textarea name="updatedText" id="updatedText" cols="50" rows="5" style="display: none;"></textarea>
+                  <button class="btn btn-success mt-2" id="btnUpdate" style="display: none;">Update Blog Post</button>
+                </form>
+              </div>
+
+              
             </div>
           </div>
         </div>
+
+        
       </div>
     </header>
 
@@ -26,7 +40,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            
+            <%= post[0].detail %>
           </div>
         </div>
       </div>
@@ -43,5 +57,14 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
+    <script>
+      function showTextBox() {
+        const textBox = document.querySelector("#updatedText");
+        const updateBtn = document.querySelector("#btnUpdate");
+
+        textBox.style.display = "block";
+        updateBtn.style.display = "inline";
+      }
+    </script>
   </body>
 </html>

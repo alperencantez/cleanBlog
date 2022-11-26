@@ -1,8 +1,9 @@
-const express = require("express");
-require("dotenv").config();
-const mongoose = require("mongoose");
-const Post = require("./models/Post.js");
+const express = require('express');
+require('dotenv').config();
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const app = express();
+const controllers = require('./controllers/controllers');
 
 // Establish DB Connection
 mongoose.connect(process.env.MONGODB_URI);
@@ -10,32 +11,19 @@ mongoose.connect(process.env.MONGODB_URI);
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
+app.use(methodOverride('_method'));
 
 // Template engine
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 
-app.get("/", async (req, res) => {
-  const posts = await Post.find({});
-  res.render("index", { posts });
-});
+app.get('/', controllers.main);
+app.get('/about', controllers.about);
+app.get('/add', controllers.addGet);
+app.post('/add', controllers.addPost);
 
-app.get("/about", (req, res) => {
-  res.render("about");
-});
+app.get('/post/:id', controllers.post);
+app.put('/post/:id', controllers.updatePost);
+app.delete('/post/:id', controllers.deletePost);
 
-app.get("/add", async (req, res) => {
-  res.render("add");
-});
-
-app.post("/add", async (req, res) => {
-  await Post.create(req.body);
-  res.redirect("/");
-});
-
-app.get("/post/:id", async (req, res) => {
-  const post = await Post.find({ _id: req.params.id });
-  res.render("post", { post });
-});
-
-app.listen(3000, () => console.log("Express is up and running!"));
+app.listen(3000, () => console.log('Express is up and running!'));
