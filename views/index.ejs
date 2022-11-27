@@ -24,8 +24,13 @@
               <h2 class="post-title">
                 <%= post.title %>
               </h2>
+              
               <h3 class="post-subtitle">
-               <%= post.detail.slice(0, 100) %>...
+                <% if (post.detail.length < 100) { %>
+                  <%= post.detail  %>
+                <% } else { %> 
+                  <%= post.detail.slice(0, 100) %>...
+                 <% } %>
               </h3>
             </a>
             <p class="post-meta">
